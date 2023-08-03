@@ -294,8 +294,8 @@ public struct Transaction {
 public extension Transaction {
     
     struct Signature {
-        var signature: Data?
-        var publicKey: PublicKey
+        public var signature: Data?
+        public var publicKey: PublicKey
 
         public init(signature: Data?, publicKey: PublicKey) {
             self.signature = signature
