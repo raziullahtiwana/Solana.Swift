@@ -185,21 +185,23 @@ extension Transaction.Message {
         byteArray = instructionsBlock.1
         
         var instructions: [CompiledInstruction] = []
-        for _ in 0...(instructionsBlock.0 - 1) {
-            guard let programIdIndex = byteArray.firstAsInt() else { break }
-            
-            byteArray = Data(byteArray.dropFirst())
-            
-            let accountBlock = Shortvec.nextBlock(buffer: byteArray)
-            byteArray = accountBlock.1
-            
-            let accounts = accountBlock.0.bytes.map{ Int($0) }
-            
-            let dataBlock = Shortvec.nextBlock(buffer: byteArray)
-            byteArray = dataBlock.1
-                        
-            let compiledInstruction = CompiledInstruction(programIdIndex: programIdIndex, accounts: accounts, data: dataBlock.0.bytes)
-            instructions.append(compiledInstruction)
+        if instructionsBlock.0 >= 1 {
+            for _ in 0...(instructionsBlock.0 - 1) {
+                guard let programIdIndex = byteArray.firstAsInt() else { break }
+                
+                byteArray = Data(byteArray.dropFirst())
+                
+                let accountBlock = Shortvec.nextBlock(buffer: byteArray)
+                byteArray = accountBlock.1
+                
+                let accounts = accountBlock.0.bytes.map{ Int($0) }
+                
+                let dataBlock = Shortvec.nextBlock(buffer: byteArray)
+                byteArray = dataBlock.1
+                            
+                let compiledInstruction = CompiledInstruction(programIdIndex: programIdIndex, accounts: accounts, data: dataBlock.0.bytes)
+                instructions.append(compiledInstruction)
+            }
         }
         
         let header = Header(
