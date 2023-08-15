@@ -219,12 +219,15 @@ extension Transaction.Message {
             guard let programId = PublicKey(string: accountKeys[instruction.programIdIndex]) else { continue }
 
             var keys: [AccountMeta] = []
-            for j in 0...(instruction.accounts.count - 1) {
-                let accountIndex = instruction.accounts[j]
-                let pubKey = accountKeys[accountIndex]
-                // TODO: Not sure if it should continue or throw, but I don't think it can happen here
-                guard let accountMeta = accountMetasAsDictionary[pubKey] else { continue }
-                keys.append(accountMeta)
+            
+            if !instruction.accounts.isEmpty {
+                for j in 0...(instruction.accounts.count - 1) {
+                    let accountIndex = instruction.accounts[j]
+                    let pubKey = accountKeys[accountIndex]
+                    // TODO: Not sure if it should continue or throw, but I don't think it can happen here
+                    guard let accountMeta = accountMetasAsDictionary[pubKey] else { continue }
+                    keys.append(accountMeta)
+                }
             }
 
             let transactionInstruction = TransactionInstruction(keys: keys, programId: programId, data: instruction.data)

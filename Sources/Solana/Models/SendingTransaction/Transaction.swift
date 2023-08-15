@@ -5,7 +5,7 @@ public struct Transaction {
     private static let SIGNATURE_LENGTH: Int = 64
     private static let DEFAULT_SIGNATURE = Data(capacity: 0)
     
-    var signatures = [Signature]()
+    public var signatures = [Signature]()
     private let feePayer: PublicKey
     private let recentBlockhash: String
 
@@ -72,7 +72,7 @@ public struct Transaction {
         }
     }
 
-    func findSignature(pubkey: PublicKey) -> Signature? {
+    public func findSignature(pubkey: PublicKey) -> Signature? {
         signatures.first(where: {$0.publicKey == pubkey})
     }
 
@@ -294,8 +294,8 @@ public struct Transaction {
 public extension Transaction {
     
     struct Signature {
-        var signature: Data?
-        var publicKey: PublicKey
+        public var signature: Data?
+        public var publicKey: PublicKey
 
         public init(signature: Data?, publicKey: PublicKey) {
             self.signature = signature
